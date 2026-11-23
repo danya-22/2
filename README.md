@@ -168,7 +168,7 @@ CF-RAY: a5f0392e092bd8d6-FRA
 Cloudflare encountered an error processing this request:
 ```
 
-*Примітка: тіло відповіді A.3.3 у збереженому фрагменті відсутнє.*
+*Примітка: у збереженому виводі A.3.3 відображено лише початок тіла відповіді. Заголовок `Content-Length: 57` указує на заявлений розмір тіла — 57 байтів.*
 
 ### Завдання A.4. Два запити в одному з'єднанні
 
@@ -243,42 +243,39 @@ alt-svc: h3=":443"; ma=86400
 **Команда:**
 
 ```
-curl -v http://sumdu.edu.ua/
+curl -v --http1.1 http://sumdu.edu.ua/ -o /dev/null
 ```
 
 **Вивід:**
 
 ```
-* Host sumdu.edu.ua:80 was resolved.
+% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* Host sumdu.edu.ua:80 was resolved.
 * IPv6: 2606:4700:20::681a:ce4, 2606:4700:20::681a:de4, 2606:4700:20::ac43:4b35
-* IPv4: 104.26.12.228, 104.26.13.228, 172.67.75.53
-*   Trying 104.26.12.228:80...
-* Connected to sumdu.edu.ua (104.26.12.228) port 80
+* IPv4: 104.26.13.228, 104.26.12.228, 172.67.75.53
+*   Trying 104.26.13.228:80...
+* Connected to sumdu.edu.ua (104.26.13.228) port 80
 > GET / HTTP/1.1
 > Host: sumdu.edu.ua
 > User-Agent: curl/8.5.0
 > Accept: */*
 > 
 < HTTP/1.1 301 Moved Permanently
-< Date: Mon, 23 Nov 2026 12:31:07 GMT
+< Date: Mon, 23 Nov 2026 13:48:20 GMT
 < Content-Type: text/html; charset=UTF-8
 < Transfer-Encoding: chunked
 < Connection: keep-alive
 < Location: https://sumdu.edu.ua/
 < Speculation-Rules: "/cdn-cgi/speculation"
-< Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=MrFeiyHc7QHs5GD%2B6HdAxjO%2B%2B%2B6fLP%2Fa4uXJopZhFCegU66M2rIg5Kz5OHESWsumM%2FZ%2BjRJza0jJgHZeD0b3lXomZO3i8WytXhS0I2EVJEXq9c7p%2Fmaq6mN2SSrEjQ%3D%3D"}]}
+< Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=o14FjCicS8gMv0RPXD23Vlkn2ZS0S%2F4iwM180JbC31LEJlHpQufnxCup1DUNDs99k55OISmDsdffRJ1hC1mHPpG6jF2DMyFistBpwn4HCkvuBLMEQdOgULmBdC4z%2Bw%3D%3D"}]}
 < Nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
 < Server: cloudflare
-< CF-RAY: a5f030652f75dc70-FRA
+< CF-RAY: a5f0a1812a30d3c1-FRA
 < alt-svc: h3=":443"; ma=86400
 < 
-<html>
-<head><title>301 Moved Permanently</title></head>
-<body><a href="https://sumdu.edu.ua/cdn-cgi/content?id=qWvRB3Osup9VifmwD_7ZJQ_oeg9TrpJxqHwjSZjni10-1795437067.068494-1.2.1.1-yug1QiCdVfQRy5r3UOcTNrJCK.69vfl.IM_ESQKIjxfEq.u_.Vo4ef6fXzJJCRh_" aria-hidden="true" rel="nofollow noopener" style="display: none !important; visibility: hidden !important"></a>
-<center><h1>301 Moved Permanently</h1></center>
-<hr><center>cloudflare</center>
-</body>
-</html>
+{ [464 bytes data]
+100   464    0   464    0     0   6704      0 --:--:-- --:--:-- --:--:--  6724
 * Connection #0 to host sumdu.edu.ua left intact
 ```
 
@@ -295,6 +292,7 @@ openssl s_client -connect sumdu.edu.ua:443 -servername sumdu.edu.ua -crlf -quiet
 **Набраний запит:**
 
 ```
+
 GET / HTTP/1.1
 Host: sumdu.edu.ua
 Connection: close
@@ -304,25 +302,14 @@ Connection: close
 **Вивід:**
 
 ```
-openssl s_client -connect sumdu.edu.ua:443 -servername sumdu.edu.ua -crlf -quiet
-depth=2 C = US, O = Google Trust Services LLC, CN = GTS Root R4
-verify return:1
-depth=1 C = US, O = Google Trust Services, CN = WE1
-verify return:1
-depth=0 CN = sumdu.edu.ua
-verify return:1
-
-GET / HTTP/1.1
-Host: sumdu.edu.ua
-
 HTTP/1.1 403 Forbidden
-Date: Mon, 23 Nov 2026 12:38:38 GMT
+Date: Mon, 23 Nov 2026 13:50:44 GMT
 Content-Type: text/html; charset=UTF-8
-Content-Length: 5264
+Content-Length: 5285
 Connection: close
 Accept-Ch: Sec-CH-UA-Bitness, Sec-CH-UA-Arch, Sec-CH-UA-Full-Version, Sec-CH-UA-Mobile, Sec-CH-UA-Model, Sec-CH-UA-Platform-Version, Sec-CH-UA-Full-Version-List, Sec-CH-UA-Platform, Sec-CH-UA, UA-Bitness, UA-Arch, UA-Full-Version, UA-Mobile, UA-Model, UA-Platform-Version, UA-Platform, UA
 Cf-Mitigated: challenge
-Content-Security-Policy: default-src 'none'; script-src 'nonce-w6lZsGSCGDp5AHrAoVXBoj' 'unsafe-eval' https://challenges.cloudflare.com; script-src-attr 'none'; style-src 'unsafe-inline'; img-src 'self' https://challenges.cloudflare.com; connect-src 'self' https://challenges.cloudflare.com; frame-src 'self' https://challenges.cloudflare.com blob:; child-src 'self' https://challenges.cloudflare.com blob:; worker-src blob:; form-action http: https:; base-uri 'self'
+Content-Security-Policy: default-src 'none'; script-src 'nonce-Uazq0oKRc0kO1IKqWmzi10' 'unsafe-eval' https://challenges.cloudflare.com; script-src-attr 'none'; style-src 'unsafe-inline'; img-src 'self' https://challenges.cloudflare.com; connect-src 'self' https://challenges.cloudflare.com; frame-src 'self' https://challenges.cloudflare.com blob:; child-src 'self' https://challenges.cloudflare.com blob:; worker-src blob:; form-action http: https:; base-uri 'self'
 Server: cloudflare
 Critical-Ch: Sec-CH-UA-Bitness, Sec-CH-UA-Arch, Sec-CH-UA-Full-Version, Sec-CH-UA-Mobile, Sec-CH-UA-Model, Sec-CH-UA-Platform-Version, Sec-CH-UA-Full-Version-List, Sec-CH-UA-Platform, Sec-CH-UA, UA-Bitness, UA-Arch, UA-Full-Version, UA-Mobile, UA-Model, UA-Platform-Version, UA-Platform, UA
 Cross-Origin-Embedder-Policy: require-corp
@@ -331,16 +318,16 @@ Cross-Origin-Resource-Policy: same-origin
 Origin-Agent-Cluster: ?1
 Permissions-Policy: accelerometer=(),camera=(),clipboard-read=(),clipboard-write=(),geolocation=(),gyroscope=(),hid=(),magnetometer=(),microphone=(),payment=(),publickey-credentials-get=(),screen-wake-lock=(),serial=(),sync-xhr=(),usb=(),xr-spatial-tracking=*
 Referrer-Policy: same-origin
-Server-Timing: chlray;desc="a5f03b680e6edbfe"
+Server-Timing: chlray;desc="a5f0a5067d110a96"
 X-Content-Type-Options: nosniff
 X-Frame-Options: SAMEORIGIN
 Speculation-Rules: "/cdn-cgi/speculation"
-Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=gX0odNkS%2Bz40Q4fakQKQdbwsZ0aKDaQ%2FdGCAlZuQPy0Z8onXTl0pPwxjJFA6F%2Fu8RKXH%2FQhCeNXEfwyuhIZqvwjVopMOlRmkz5a4z9srGj%2BiD%2BVW7jRnd%2BmHTG8EIQ%3D%3D"}]}
+Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=5FTAua9LyG3EdghfDFwFuu0esM1R78HX1XOnyZm3Pn05jGATMDHL7dqdhpk7x2tB2%2B41U%2Fp%2FHuFrGeVE483q6t7%2FC3rOfUJlMuKd09OtLHhhPC9RjbsoLT7yI5Xn9Q%3D%3D"}]}
 Nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
-CF-RAY: a5f03b680e6edbfe-FRA
+CF-RAY: a5f0a5067d110a96-FRA
 alt-svc: h3=":443"; ma=86400
 
-<!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="content-security-policy" content="default-src &#39;none&#39;; script-src &#39;nonce-w6lZsGSCGDp5AHrAoVXBoj&#39; &#39;unsafe-eval&#39; https://challenges.cloudflare.com; script-src-attr &#39;none&#39;; style-src &#39;unsafe-inline&#39;; img-src &#39;self&#39; https://challenges.cloudflare.com; connect-src &#39;self&#39; https://challenges.cloudflare.com; frame-src &#39;self&#39; https://challenges.cloudflare.com blob:; child-src &#39;self&#39; https://challenges.cloudflare.com blob:; worker-src blob:; form-action http: https:; base-uri &#39;self&#39;"><style>*{box-sizing:border-box;margin:0;padding:0}html{line-height:1.15;-webkit-text-size-adjust:100%;color:#313131;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"}body{display:flex;flex-direction:column;height:100vh;min-height:100vh}.main-content{margin:8rem auto;padding-left:1.5rem;max-width:60rem}@media (width <= 720px){.main-content{margin-top:4rem}}#challenge-error-text{background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgZmlsbD0ibm9uZSI+PHBhdGggZmlsbD0iI0IyMEYwMyIgZD0iTTE2IDNhMTMgMTMgMCAxIDAgMTMgMTNBMTMuMDE1IDEzLjAxNSAwIDAgMCAxNiAzbTAgMjRhMTEgMTEgMCAxIDEgMTEtMTEgMTEuMDEgMTEuMDEgMCAwIDEtMTEgMTEiLz48cGF0aCBmaWxsPSIjQjIwRjAzIiBkPSJNMTcuMDM4IDE4LjYxNUgxNC44N0wxNC41NjMgOS41aDIuNzgzem0tMS4wODQgMS40MjdxLjY2IDAgMS4wNTcuMzg4LjQwNy4zODkuNDA3Ljk5NCAwIC41OTYtLjQwNy45ODQtLjM5Ny4zOS0xLjA1Ny4zODktLjY1IDAtMS4wNTYtLjM4OS0uMzk4LS4zODktLjM5OC0uOTg0IDAtLjU5Ny4zOTgtLjk4NS40MDYtLjM5NyAxLjA1Ni0uMzk3Ii8+PC9zdmc+");background-repeat:no-repeat;background-size:contain;padding-left:34px}</style><meta http-equiv="refresh" content="360"></head><body><div class="main-wrapper" role="main"><div class="main-content"><noscript><div class="h2"><span id="challenge-error-text">Enable JavaScript and cookies to continue</span></div></noscript></div></div><script nonce="w6lZsGSCGDp5AHrAoVXBoj">(function(){window._cf_chl_opt = {cFPWv: 'b',cH: 'ZEON5YN03FXcmUg3JojU2vdSe9_1YjEq43ztkHLv_OE-1795437518-1.2.1.1-wNLjz5p4XXyLyy0Es7i5BW4onBkGqmzCEIs7xsHyzuwDN0UjYhcZrxTPflzcFivB',cITimeS: '1795437518',cN: 'w6lZsGSCGDp5AHrAoVXBoj',cRay: 'a5f03b680e6edbfe',cTplC:0,cTplO:0,cTplV:5,cType: 'managed',cUPMDTk:"/?__cf_chl_tk=OS_BXrdqfw0YpnJ3_nNgJsXcBKrdPxirkucnSOaFkVE-1795437518-1.0.1.1-OEpRLCZikRC2cmD58J3AY3weP_lSKO82qPFT9ler6d8",cvId: '3',cZone: 'sumdu.edu.ua',fa:"/?__cf_chl_f_tk=OS_BXrdqfw0YpnJ3_nNgJsXcBKrdPxirkucnSOaFkVE-1795437518-1.0.1.1-OEpRLCZikRC2cmD58J3AY3weP_lSKO82qPFT9ler6d8",md: 'WZamW99WGOl2PCYS25c9sQ8__HtXDGgN0Xrp2SH0fdo-1795437518-1.2.1.1-.OkD0g9vVMI4APdaTml_0XYdw9mfxKGa8ykviwgICbit.vpJdggywhHIFZ6BjDjXT1YzRQupjE9MtG_pDbaRGXmUsj6uD.PUOxOZAcw4fntVOfQWn4hjxFp_tSv_L9_OPc6coLTT0iP_YG4WVffnB2Oa6KuymcOKZIffZWk.RKXCL2dphj11Eb02BV1ZBB8TLw1_pJPu7_aZr2Yf6WB0Yc8Ilqwn.ATPzvFU.nPFCcSUJMDcKkaxuwOVxJ6Np970gfzR6KtkFgbo.pCFZ9_djt5NB6DRafzcI_Z0jl2fVo1dvqojC_FFtEOfz1nKVNQB0BsC6IUZSBvRMuWPFrPzhv35UzDcmS448fblLlgqb7qz.G_xMEQksPZGvqlrEQL2ab.n5.TFEDAkN0E3gljEMxS6T.ROFCvdfIbW7.DVLSqsOtA6NbupeM4VmuENRmQtKZ5sAimFx2qG1hlX_1KpkKBwqm6S.WwgCz0FFit1kcM9cBqXyveqag2V8UdX89nO_8JX0L.XMnfGDjV8sV0Jh1.kwTlvQhTnKeG8PQYyUc2o6xPDkiPXrQtMyojvRFrmGHQTPYR7IdRVcm6e4GcwxgeTfs8YkffGNdGlatoXqvKFuaP2xMTXB8KXirbgOtU_gjioKCUeSIgGfm7uV61UHz6I3NN89eEdYdxWflJBJoLSwdzOItry3UbqmypW9535MJCijE1Vi0EMNI1h9YLllnSyGTLEXp510svS.qVL9CJwx3HYHqUo9HT0wohIO0OO4TitQ4g4UeEZUGfRBiUM13mh0q2U0eYGXjyp9EjjlivTfsK_VauoOk5erRUNG0BOdgn1fsaGWdeCLIRNpz83zYdVnfUS83sjtA9z4K4Vc98ZBCUpz_D6XEAVxO6IK.eJhm0IJcooZ0EBdSxZxxJ1fNvwHzb3Fy3rdISNlf1QVM9ObAKY0OGQSiSWtaY01jedSMk93Vc84.wLwB.L0ydP9F6bFZca.VFr_LCuY.J4SkwmIOvlqKd6_4Bps91A4wconBf5z1zmKyYd7vt8Rk7mkw',mdrd: 'mextom_RVRPJ8EoRwmRJrEUB0Ms75bh8Gj_Hlrfx6Po-1795437518-1.2.1.1-x.NqxWc7LkcBH.TqIZxXK1OE24DuQgNT5TuXabor8pdCYFuA1KsWUau2Uw60VM550qVNtnCY_foYElh5YP.8kl9odqCxO_5bPewma1skzV3jwKNAJuMZ64Bh8rkvb6HC5zd6EQe0Cgv2mblD1oUro4SpBU8A0lc6jiulcJRkX2Q',};var a = document.createElement('script');a.nonce = 'w6lZsGSCGDp5AHrAoVXBoj';a.src = '/cdn-cgi/challenge-platform/h/b/orchestrate/chl_page/v1?ray=a5f03b680e6edbfe';window._cf_chl_opt.cOgUHash = location.hash === '' && location.href.indexOf('#') !== -1 ? '#' : location.hash;window._cf_chl_opt.cOgUQuery = location.search === '' && location.href.slice(0, location.href.length - window._cf_chl_opt.cOgUHash.length).indexOf('?') !== -1 ? '?' : location.search;if (window.history && window.history.replaceState) {var ogU = location.pathname + window._cf_chl_opt.cOgUQuery + window._cf_chl_opt.cOgUHash;history.replaceState(null, null,"/?__cf_chl_rt_tk=OS_BXrdqfw0YpnJ3_nNgJsXcBKrdPxirkucnSOaFkVE-1795437518-1.0.1.1-OEpRLCZikRC2cmD58J3AY3weP_lSKO82qPFT9ler6d8"+ window._cf_chl_opt.cOgUHash);a.onload = function() {history.replaceState(null, null, ogU);}}document.getElementsByTagName('head')[0].appendChild(a);}());</script></body></html>
+<!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="content-security-policy" content="default-src &#39;none&#39;; script-src &#39;nonce-Uazq0oKRc0kO1IKqWmzi10&#39; &#39;unsafe-eval&#39; https://challenges.cloudflare.com; script-src-attr &#39;none&#39;; style-src &#39;unsafe-inline&#39;; img-src &#39;self&#39; https://challenges.cloudflare.com; connect-src &#39;self&#39; https://challenges.cloudflare.com; frame-src &#39;self&#39; https://challenges.cloudflare.com blob:; child-src &#39;self&#39; https://challenges.cloudflare.com blob:; worker-src blob:; form-action http: https:; base-uri &#39;self&#39;"><style>*{box-sizing:border-box;margin:0;padding:0}html{line-height:1.15;-webkit-text-size-adjust:100%;color:#313131;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"}body{display:flex;flex-direction:column;height:100vh;min-height:100vh}.main-content{margin:8rem auto;padding-left:1.5rem;max-width:60rem}@media (width <= 720px){.main-content{margin-top:4rem}}#challenge-error-text{background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgZmlsbD0ibm9uZSI+PHBhdGggZmlsbD0iI0IyMEYwMyIgZD0iTTE2IDNhMTMgMTMgMCAxIDAgMTMgMTNBMTMuMDE1IDEzLjAxNSAwIDAgMCAxNiAzbTAgMjRhMTEgMTEgMCAxIDEgMTEtMTEgMTEuMDEgMTEuMDEgMCAwIDEtMTEgMTEiLz48cGF0aCBmaWxsPSIjQjIwRjAzIiBkPSJNMTcuMDM4IDE4LjYxNUgxNC44N0wxNC41NjMgOS41aDIuNzgzem0tMS4wODQgMS40MjdxLjY2IDAgMS4wNTcuMzg4LjQwNy4zODkuNDA3Ljk5NCAwIC41OTYtLjQwNy45ODQtLjM5Ny4zOS0xLjA1Ny4zODktLjY1IDAtMS4wNTYtLjM4OS0uMzk4LS4zODktLjM5OC0uOTg0IDAtLjU5Ny4zOTgtLjk4NS40MDYtLjM5NyAxLjA1Ni0uMzk3Ii8+PC9zdmc+");background-repeat:no-repeat;background-size:contain;padding-left:34px}</style><meta http-equiv="refresh" content="360"></head><body><div class="main-wrapper" role="main"><div class="main-content"><noscript><div class="h2"><span id="challenge-error-text">Enable JavaScript and cookies to continue</span></div></noscript></div></div><script nonce="Uazq0oKRc0kO1IKqWmzi10">(function(){window._cf_chl_opt = {cFPWv: 'b',cH: 'VSk3eHMdrtDlJ.YBa1Jkc7hDVFqihf8NnortGYxVpns-1795441844-1.2.1.1-vfvQho2LJfTBh46Z6sz9zSpDi1rq_zK5YJGvE1HZGbdYc4yyTu.R0miXHr7Gnmi0',cITimeS: '1795441844',cN: 'Uazq0oKRc0kO1IKqWmzi10',cRay: 'a5f0a5067d110a96',cTplC:0,cTplO:0,cTplV:5,cType: 'managed',cUPMDTk:"/?__cf_chl_tk=9MMjANZduhQVIiUoQN2gVTjUeg6Ey1nWC8mIKO3djiE-1795441844-1.0.1.1-Uj5TmXRSKhpRjFr_U4LafxAjsJXrHbZD_7Giu8rNRCM",cvId: '3',cZone: 'sumdu.edu.ua',fa:"/?__cf_chl_f_tk=9MMjANZduhQVIiUoQN2gVTjUeg6Ey1nWC8mIKO3djiE-1795441844-1.0.1.1-Uj5TmXRSKhpRjFr_U4LafxAjsJXrHbZD_7Giu8rNRCM",md: 'r6Ckh5tCBJ7Z.E163mgzLrPlFDviAKahu6fIwbO8Mvg-1795441844-1.2.1.1-VoUFA5i9oECFYObSFn7hWA8PZS_O0hPyyIUXZSbtrz_yd8uq2ALY_nLmwgMtD99ES86ibI5IkN_XJPMO.0bY1lCNYgqgUYc2AI67lBDxrnj.GP8kXYcmgjyWoWWe5XMtvrY.hOp6cWX7ZLl59Ao0Y7CA2nqXPUW9dDsrYuFFViFaElY5YsL.ZGLrYw_0g5XRV.Ud3GErTGIpO9kx6HOrwVXq7t6LHuDok.6lpgcLjQqqooF5Rb9EFgoqTihrAqi90OhGHi7yHFl1zNzDUAgX._PQhQZVrEE6j0mYMgnxBuDL_JMFM3EdYdoObyakQEGpwDomfo0V8VuFX4EJhXsKeYsp5MWhOgdBwvaBmtGTlZBJHamKSP.cW6lvlBjn3Hncs5wkZMcebZflAk0ok.YwJaavVUMPcJuQAGaKr_8JsfOGtZQ0Pk3hrFQIzyjqnt4KS.5te7dqt85ZRafN9uxrum2_3hdrcRW_DztS0ZcVj7HjMfPFnXNeFAWFFqEt6LULj5xoF.gqR2Fm9pFnJJoQtdK0Np2ApEe0_dPOjrKLjdpRp6jCvxWRNwD2pEc95isAmLc_.ijDad7JnjC40bt16ZeMiNfAixBih.T9YKx3.UTkaKRCsa_SK.K6azjEXnhpdp3ncA6KRLvwsmT15q9pSVAKqWsiqOZvjS6LAo2eglf6Ddek2LtyVRAYeZlHjP73ywCptmP86A2R45Dwg29GS7Ci6b0u2jlT0oXvk3ofAKUXwHDSXRsCob1aY_qqvHp7XnyB.wO760UgnInSRZCJ5LuFhYP_HuNAKHpOFTmm9TkY9qKZJCqW7xdZk_w5qLuzEXKG3DakjYiMj23h5_Ach1BQnBaifIVATFwIonWzO3HGkXRq4beKzQaFQ3Sbm9SbwvwKaP6S98g8b.pqKqJ0fRCAk5kYIayb6dTRM68ehAYt8d49GolFHV1.2vWTcHv7zyTkLXOhIKP5iOqPE4jhnD2NkCqWz6OWOHKsCstX72rcCUA5lrezOMwnQlBJ9zUDIy44sLX7nN4QkgJcTjHAYA',mdrd: 'mxba3p2NmfLtmkbq54nJjbw44YOHqYp2HeY4LV_6qBI-1795441844-1.2.1.1-eHRHCzmJQqe9VBjk38iXkahvN27USs1O7YFjC8JJ93GwTdAqZ0y.MfL8tJ4BW8tkh2DwD4Bac8sfjX4nr53Eb3xm2YDZALGCMs7_qlsPEu9ItyetJzf3l7KQ4F1L9IW7v_VJYMpvQsmSdx2_KT22CWrm6SZbxTjkMu_N0CTOninIgfHzr3hhaqSy7qsStAMy',};var a = document.createElement('script');a.nonce = 'Uazq0oKRc0kO1IKqWmzi10';a.src = '/cdn-cgi/challenge-platform/h/b/orchestrate/chl_page/v1?ray=a5f0a5067d110a96';window._cf_chl_opt.cOgUHash = location.hash === '' && location.href.indexOf('#') !== -1 ? '#' : location.hash;window._cf_chl_opt.cOgUQuery = location.search === '' && location.href.slice(0, location.href.length - window._cf_chl_opt.cOgUHash.length).indexOf('?') !== -1 ? '?' : location.search;if (window.history && window.history.replaceState) {var ogU = location.pathname + window._cf_chl_opt.cOgUQuery + window._cf_chl_opt.cOgUHash;history.replaceState(null, null,"/?__cf_chl_rt_tk=9MMjANZduhQVIiUoQN2gVTjUeg6Ey1nWC8mIKO3djiE-1795441844-1.0.1.1-Uj5TmXRSKhpRjFr_U4LafxAjsJXrHbZD_7Giu8rNRCM"+ window._cf_chl_opt.cOgUHash);a.onload = function() {history.replaceState(null, null, ogU);}}document.getElementsByTagName('head')[0].appendChild(a);}());</script></body></html
 ```
 
 ## Частина B. Розбір полів заголовка
@@ -358,8 +345,8 @@ alt-svc: h3=":443"; ma=86400
 | 5 | Server-Timing | cfEdge;dur=12,cfOrigin;dur=0 | Містить дані про час обробки запиту | Проміжний вузол | Назви cfEdge та cfOrigin пов'язані з Cloudflare |
 | 6 | Location | https://sumdu.edu.ua/ | Вказує адресу перенаправлення | Не визначено | Код 301 означає перенаправлення, але походження поля точно невідоме |
 | 7 | Speculation-Rules | "/cdn-cgi/speculation" | Вказує правила попереднього завантаження ресурсів | Проміжний вузол | Шлях /cdn-cgi/ пов'язаний із Cloudflare |
-| 8 | Report-To | JSON із адресою звітів | Вказує адресу для надсилання звітів браузера | Проміжний вузол | Адреса звітування належить Cloudflare |
-| 9 | Nel | JSON із параметрами звітування | Налаштовує звіти про мережеві помилки | Проміжний вузол | Містить параметри мережевого моніторингу |
+| 8 | Report-To | `{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=OWzlLT0BUCoUjHUBA76CIxcJjpYFczWtZGKFA7ZZeyHtv3fEEqJq%2Fur%2Bbv%2FueWsetumdt7cQFlPU0TdSbrAxKtjvp0Iwx3Drs68jP8qoFqfR%2BiiAKTQIVo%2BDGsuMbA%3D%3D"}]}` | Вказує адресу для надсилання звітів браузера | Проміжний вузол | Адреса звітування належить Cloudflare |
+| 9 | Nel | `{"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}` | Налаштовує звіти про мережеві помилки | Проміжний вузол | Параметри пов'язані зі звітуванням Cloudflare |
 | 10 | Server | cloudflare | Вказує програмне забезпечення, яке обробило запит | Проміжний вузол | У значенні прямо зазначено Cloudflare |
 | 11 | CF-RAY | a5e080c62accacc1-CDG | Ідентифікує запит у мережі Cloudflare | Проміжний вузол | Службовий ідентифікатор Cloudflare |
 | 12 | alt-svc | h3=":443"; ma=86400 | Повідомляє про альтернативний протокол | Не визначено | Повідомляє про HTTP/3; походження поля за одним виводом не доведено |
@@ -395,7 +382,7 @@ alt-svc: h3=":443"; ma=86400
 
 ### 4. Які поля заголовка програма curl додала самостійно (завдання A.5)? З якою метою їх додано?
 
-У типовому запиті `curl` додає `Host`, `User-Agent` та `Accept`. Поле `Host` вказує домен, `User-Agent` повідомляє назву клієнтської програми, а `Accept` визначає допустимі типи відповіді. **Точний перелік потребує перевірки за фактичним виводом A.5.**
+У завданні A.5 програма `curl` автоматично сформувала запит HTTP/1.1 із заголовками `Host: sumdu.edu.ua`, `User-Agent: curl/8.5.0` та `Accept: */*`. Поле `Host` визначає потрібний вебсайт, `User-Agent` ідентифікує клієнтську програму, а `Accept` указує, які типи вмісту вона готова приймати. Порівняно з ручним запитом A.1, додатковими полями є `User-Agent` та `Accept`.
 
 ### 5. За якими ознаками у вашому виводі виявляється присутність проміжного вузла?
 
@@ -403,7 +390,7 @@ alt-svc: h3=":443"; ma=86400
 
 ### 6. Три рядки, про які не йшлося на лекції, наведено в Додатку В.
 
-Три рядки з виводу A.1 наведено нижче. Потрібно перевірити за лекцією, що саме ці поля не розглядалися.
+Три рядки з фактичного виводу завдання A.1 наведено в Додатку В: `Server-Timing`, `CF-RAY` та `alt-svc`. Вони містять інформацію про час обробки запиту, ідентифікатор Cloudflare та підтримку альтернативного протоколу HTTP/3.
 
 ## Додаток В. Відповіді на питання 6
 
@@ -417,13 +404,15 @@ alt-svc: h3=":443"; ma=86400
 
 **Вузол, з яким установлювалося з'єднання (у всіх пробах однаковий):** `sumdu.edu.ua:80`
 
-**| Проба | Значення поля `Host` | Версія | Код стану | Обсяг тіла відповіді | Збігається з A.1 (так / ні) |
+
+| Проба | Значення поля `Host` | Версія | Код стану | Обсяг тіла відповіді | Збігається з A.1 (так / ні) |
 |---|---|---|---|---|---|
 | A.1 (вихідна) | `sumdu.edu.ua` | 1.1 | 301 | 825 байтів (розмір чанка `0x339`) | — |
 | A.2 | поле відсутнє | 1.1 | 400 | 155 байтів | Ні |
 | A.3.1 | `torproject.org` | 1.1 | 409 | 17 байтів | Ні |
 | A.3.2 | `opism-pr02.invalid` | 1.1 | 409 | 17 байтів | Ні |
-| A.3.3 | поле відсутнє | 1.0 | 403 | 57 байтів | Ні |**
+| A.3.3 | поле відсутнє | 1.0 | 403 | 57 байтів (за `Content-Length`) | Ні |
+
 
 **Висновок за таблицею:**
 
